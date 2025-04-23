@@ -5,9 +5,5 @@ class ClientServeInteraction {
             
         }
     }
-    public class clientThread extends Thread {
-        public void run() {
-
-        }
-    }
+   
 }

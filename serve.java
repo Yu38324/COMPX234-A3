@@ -2,7 +2,7 @@ public class serve {
     void socket() {
         
     }
-    void bind() {
+     void bind() {
         
     }
     void listen() {
