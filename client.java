@@ -1,29 +1,38 @@
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
 
 public class client {
     //get client's IP address and host name
-    void socket() {
-        try{
-            InetAddress c = InetAddress.getByName("localhost"); 
-            System.out.println("InetAddress: " + c.getHostAddress());
-            System.out.println("InetAddress: " + c.getHostName()); 
-        } catch(UnknownHostException e) {
+    // void socket(int port) {
+    //     try{
+    //         //socket?
+    //         //port?
+    //         InetAddress c = InetAddress.getByName("localhost"); 
+    //         System.out.println("InetAddress: " + c.getHostAddress()+ ":" + port);
+    //         System.out.println("InetAddress: " + c.getHostName()); 
+    //     } catch(UnknownHostException e) {
+    //         System.out.println("UnknownHostException: " + e.getMessage());
+    //     }
+    void main(int port) {
+        InetAddress c;
+        try {
+            c = InetAddress.getByName("localhost");
+        } catch (UnknownHostException e) {
             System.out.println("UnknownHostException: " + e.getMessage());
+            return;
         }
-        
-    }
-    void connect() {
+        Socket sock;
+        try {
+            sock = new Socket(c,port);
+
+
+
+
+        }catch (Exception e) {
+            System.out.println("SocketException: " + e.getMessage());
+            return;
+        }
 
     }
-    String send() {
-        return "Send";
-    }
-    void recv() {
 
-    }
-    void close() {
-        
-    }
-    
+  
 }
