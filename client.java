@@ -12,7 +12,25 @@ public class client {
     //     } catch(UnknownHostException e) {
     //         System.out.println("UnknownHostException: " + e.getMessage());
     //     }
-    void main(int port) {
+
+    // ??? Do I need threads for client ???
+
+    // class ClientTask implements Runnable{
+    //     public void run(){
+    //         try {
+    //             //get socket
+
+    //             //connect to server
+
+    //             //message
+
+    //         } catch (Exception e) {
+    //             System.err.println("Error .");
+    //         }
+    //     }
+
+    // }
+    void main() {
         InetAddress c;
         try {
             c = InetAddress.getByName("localhost");
@@ -20,9 +38,12 @@ public class client {
             System.out.println("UnknownHostException: " + e.getMessage());
             return;
         }
-        Socket sock;
+        Socket socket;
         try {
-            sock = new Socket(c,port);
+            // int port = 51000;
+
+            // socket = new Socket(c,port);
+            //
 
 
 
