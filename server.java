@@ -19,14 +19,14 @@ public class server {
 
     
         //create a tuple space to store tuples
-        ConcurrentHashMap<String, Integer> tupleSpace = new ConcurrentHashMap<>();
+        ConcurrentHashMap<String, String> tupleSpace = new ConcurrentHashMap<>();
 
 
         // format responds
-        private String fR(String state, String key, int value, String operation){
+        private String fR(String state, String key, String value, String operation){
             //NNN : 7+ lenth of key + length of value + length of operation
             String respd = String.format("%03d %s (%s, %d) %s", 6+ key.length() + 
-            String.valueOf(value).length(), operation.length(), state, key, value, operation);
+            value.length(), operation.length(), state, key, value, operation);
             return respd;
         }
         //format error responds
@@ -41,7 +41,7 @@ public class server {
         //: if a tuple with key k exists, the tuple (k, v) is read and the value v is 
         //returned; if k does not exist, the operation fails and v returns empty; 
 
-        Integer value = tupleSpace.get(key);
+        String value = tupleSpace.get(key);
         if(value != null) {
             return fR("OK", key, value, "read");
         }else{
@@ -54,7 +54,7 @@ public class server {
             //: if a tuple with key k exists, the tuple (k, v) is deleted and the value v is 
             //returned; if k does not exist, the operation fails and v returns empty;
 
-            Integer value = tupleSpace.remove(key);
+            String value = tupleSpace.remove(key);
             if(value != null) {
                 return fR("OK", key, value, "get");
             }else{
@@ -64,12 +64,12 @@ public class server {
         }
 
         //PUT
-        private synchronized String put(String key, int value){
+        private synchronized String put(String key, String value){
             //: if the key k does not exist already, the tuple (k, v) is added to the tuple 
             //space and e returns 0; if a tuple with key k already exists, the operation fails and e 
             //equals 1 is returned. 
 
-            Integer oldValue = tupleSpace.putIfAbsent(key, value);
+            String oldValue = tupleSpace.putIfAbsent(key, value);
             if(oldValue == null) {
                 return fR("OK", key, value, "put");
             }else{
@@ -107,7 +107,7 @@ public class server {
                             respd = get(key);
                             break;
                         case "P":
-                        int value = Integer.parseInt(clientMessage.substring(6 + key.length()).trim());
+                        String value = clientMessage.substring(6 + key.length()).trim();
                         respd = put(key, value);
                             break;
                         default:
