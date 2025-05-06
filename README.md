@@ -20,4 +20,10 @@ do start_server will have more ports?
 
 Application Layer -> HTTP,SMTP (port?)   
 Transport Layer -> TCP,UDP
+  
+---
+`4.29`    
+  
+No, different operations via same port. One server usually listen on one port.  
+We need to use synchronized to make sure the operation is thread safe.
 

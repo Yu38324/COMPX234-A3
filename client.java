@@ -13,7 +13,7 @@ public class client {
     //         System.out.println("UnknownHostException: " + e.getMessage());
     //     }
 
-    // ??? Do I need threads for client ???
+
 
     // class ClientTask implements Runnable{
     //     public void run(){
