@@ -138,6 +138,7 @@ public class server {
                             break;
                         default:
                             respd = "ERR Unknown command";
+                            errors++;
                     }
                     out.println(respd);
 
@@ -154,6 +155,7 @@ public class server {
 
     
             } catch (IOException e) {
+                errors++;
                 System.err.println("Error handling client.");
             }
             
