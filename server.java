@@ -24,7 +24,7 @@ public class server {
 
         // format responds
         private String fR(String state, String key, String value, String operation){
-            //NNN : 7+ lenth of key + length of value + length of operation
+            //NNN : 6+ lenth of key + length of value + length of operation
             String respd = String.format("%03d %s (%s, %d) %s", 6+ key.length() + 
             value.length(), operation.length(), state, key, value, operation);
             return respd;
@@ -163,7 +163,6 @@ public class server {
             }
        }
        void main(String[] args) {
-
             start_serve();
         }
 
