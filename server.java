@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class server {
@@ -20,7 +21,24 @@ public class server {
     
         //create a tuple space to store tuples
         ConcurrentHashMap<String, String> tupleSpace = new ConcurrentHashMap<>();
+        //counters
+        private int numClients = 0;
+        private int numOp = 0;
+        private int reads = 0, gets = 0, puts = 0, errors = 0;
 
+        //timer
+        private void startLogger(){
+            Timer timer = new Timer(true);
+            timer.scheduleAtFixedRate(new java.util.TimerTask() {
+                public void run() {
+                    int tupleCount = tupleSpace.size();
+                    double avgKey = tupleSpace.keySet().stream().mapToInt(String::length).average().orElse(0.0);
+                    double avgValue = tupleSpace.values().stream().mapToInt(String::length).average().orElse(0.0);
+                    System.out.printf("[STATS] Tuples: %d | AvgKey: %.2f | AvgValue: %.2f | Clients: %d | Ops: %d (R: %d  G: %d  P: %d  E: %d)\n",
+                            tupleCount, avgKey, avgValue, numClients, numOp, reads, gets, puts, errors);
+                }
+            }, 10000, 10000); // every 10 seconds
+        }
 
         // format responds
         private String fR(String state, String key, String value, String operation){
@@ -40,11 +58,13 @@ public class server {
        private synchronized String read(String key){
         //: if a tuple with key k exists, the tuple (k, v) is read and the value v is 
         //returned; if k does not exist, the operation fails and v returns empty; 
-
+        numOp++;
         String value = tupleSpace.get(key);
         if(value != null) {
+            reads++;
             return fR("OK", key, value, "read");
         }else{
+            errors++;
             return fE(key,"dose not exist");
         }
        }
@@ -53,11 +73,14 @@ public class server {
         private synchronized String get(String key){
             //: if a tuple with key k exists, the tuple (k, v) is deleted and the value v is 
             //returned; if k does not exist, the operation fails and v returns empty;
-
+            numOp++;
+            
             String value = tupleSpace.remove(key);
             if(value != null) {
+                gets++;
                 return fR("OK", key, value, "get");
             }else{
+                errors++;
                 return fE(key,"dose not exist");
             }
             
@@ -68,11 +91,13 @@ public class server {
             //: if the key k does not exist already, the tuple (k, v) is added to the tuple 
             //space and e returns 0; if a tuple with key k already exists, the operation fails and e 
             //equals 1 is returned. 
-
+            numOp++;
             String oldValue = tupleSpace.putIfAbsent(key, value);
             if(oldValue == null) {
+                puts++;
                 return fR("OK", key, value, "put");
             }else{
+                errors++;
                 return fE(key,"already exist");
             }
         }
@@ -84,6 +109,7 @@ public class server {
         //get the client's socket
         public ClientHandler(Socket socket) {
             this.cs = socket;
+            numClients++;
         }
         public void run(){
             try {
@@ -137,10 +163,9 @@ public class server {
     }
     
         
-        void start_serve() {
+        void start_serve(int port) {
+            startLogger();
            
-           String host = "localhost";
-           int port = 51000;
            
           try{
             //listen to port 
@@ -162,8 +187,14 @@ public class server {
                 System.out.println("UnknownHostException: " + e.getMessage());
             }
        }
-       void main(String[] args) {
-            start_serve();
+       public static void main(String[] args) {
+            if (args.length != 1) {
+                System.out.println("Usage: java server <port>");
+                return;
+            }
+            int port = Integer.parseInt(args[0]);
+            server s = new server();
+            s.start_serve(port);
         }
 
 }
