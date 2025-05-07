@@ -41,12 +41,9 @@ public class client {
         this.port = port;
         this.fileName = fileName;
     }
-    private String fR(String op, String key, String value)
-     {
-        
-        String request = String.format("%03d %s (%s, %s)", 6 + key.length() + value.length(), op, key, value);
-
-        return request;
+    private String fR(String op, String key, String value) {
+        int length = 6 + key.length() + (value != null ? value.length() : 0);
+        return String.format("%03d %s %s%s", length, op, key, value != null ? " " + value : "");
     }
     public void client_Request(){
         try {
@@ -88,11 +85,16 @@ public class client {
             
                 }
                 writer.println(message);
+                System.out.println(message);
                 String response = reader.readLine();
                 
 
             }
 
+            fileReader.close();
+            reader.close();
+            writer.close();
+            socket.close();
             
         } catch (Exception e) {
         }   

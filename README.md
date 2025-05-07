@@ -26,4 +26,9 @@ Transport Layer -> TCP,UDP
   
 No, different operations via same port. One server usually listen on one port.  
 We need to use synchronized to make sure the operation is thread safe.
+  
+---
+`5.6`  
+Error handling client.  
+Maybe because it can't find the key, so it will throw an exception.
 

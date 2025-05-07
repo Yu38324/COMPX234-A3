@@ -43,13 +43,13 @@ public class server {
         // format responds
         private String fR(String state, String key, String value, String operation){
             //NNN : 6+ lenth of key + length of value + length of operation
-            String respd = String.format("%03d %s (%s, %d) %s", 6+ key.length() + 
+            String respd = String.format("%03d %s (%s, %s) %s", 6+ key.length() + 
             value.length(), operation.length(), state, key, value, operation);
             return respd;
         }
         //format error responds
         private String fE(String key, String error){
-            String respd = String.format("%03d %s (%s, %s)", 6+ key.length() + error.length(), key, error);
+            String respd = String.format("%03d %s (%s)", 6 + key.length() + error.length(), key, error);
             return respd;
 
         }
@@ -121,6 +121,11 @@ public class server {
                     System.out.println("Client: " + clientMessage);
                     //respond
                     //out.println("Server: " + clientMessage);
+                    //check if the message is valid
+                    if (clientMessage.length() < 7) {
+                        out.println("ERR Invalid message format");
+                        continue;
+                    }
                     String command = clientMessage.substring(4,5);
                     String key = clientMessage.substring(5).split(" ")[0];
                     String respd;
@@ -141,6 +146,7 @@ public class server {
                             errors++;
                     }
                     out.println(respd);
+                    System.out.println(respd);
 
 
                     if(clientMessage.equals("exit")) {
@@ -156,7 +162,8 @@ public class server {
     
             } catch (IOException e) {
                 errors++;
-                System.err.println("Error handling client.");
+                System.err.println("Error handling client."+e.getMessage());
+                e.printStackTrace();
             }
             
     
@@ -187,6 +194,7 @@ public class server {
             }
             } catch(Exception e) {
                 System.out.println("UnknownHostException: " + e.getMessage());
+                e.printStackTrace();
             }
        }
        public static void main(String[] args) {
