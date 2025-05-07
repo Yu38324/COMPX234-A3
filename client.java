@@ -56,6 +56,10 @@ public class client {
 
             while ((request = fileReader.readLine()) != null) {
                 //check the format
+                if (request.length() < 7) {
+                    System.out.println(request+":ERR Invalid message format");
+                    continue;
+                }
 
 
                 //split the request into operation and key
@@ -65,6 +69,10 @@ public class client {
                 //check if has value or not
                 String value = parts.length >  3? parts[2] : null;
                 //check the length of the key which can't be more than 970
+                if (key.length() > 970) {
+                    System.out.println(request+":ERR Key is too long");
+                    continue;
+                }
 
 
                 //creat the message to send to the server

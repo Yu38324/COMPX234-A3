@@ -30,5 +30,18 @@ We need to use synchronized to make sure the operation is thread safe.
 ---
 `5.6`  
 Error handling client.  
-Maybe because it can't find the key, so it will throw an exception.
+Maybe because it can't find the key, so it will throw an exception. 
+Error: value %d -> %s  
+and add some e.message to the error.  
+I have searched how to run clients in the same time online. And created run_clients.bat  
+Add counters to code.  
+
+---
+`5.7`
+
+Add limit to client.
+I tested the code, but it the numTuple hasn't been changed.
+
+
+
 
